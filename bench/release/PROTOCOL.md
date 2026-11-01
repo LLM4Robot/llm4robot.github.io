@@ -41,7 +41,7 @@ From 2026-10-23, the L3-03 alternative matches the paper's two-book containment
 criterion instead of its earlier lower-book-only rule. Both settings require a
 full turn during transfer, continuous stacking and tabletop support, and no
 grasping or lifting. Historical runs retain their recorded prompts and scoring
-rules; this update does not rescore them. Per-setting budgets below are unchanged.
+rules; this update does not rescore them. Current budgets are listed below.
 
 L1, L2-07 and L3 retain gravity compensation disabled and Cartesian completion tolerance
 0.005 m; L2-01–L2-06 retain gravity compensation enabled and tolerance 0.001 m. These are
@@ -49,20 +49,26 @@ existing settings, not newly recommended universal values.
 
 ## Budgets
 
-`configs/benchmark/experiments.json` lists all current defaults. It describes
-this software version, not reconstructed historical records.
+All 32 original and alternative settings default to **150 model calls or
+18,000 seconds (5 hours)**, whichever limit is reached first. These defaults
+apply to direct task execution, `tools/reproduce.py`, batch execution, and the
+remote launcher. The additional L3-01 270-degree configuration uses the same limits.
+
+`configs/benchmark/experiments.json` lists the current defaults, aligned with the
+report on 2026-11-01. This describes new runs; existing run snapshots, historical
+results and resumed batches retain their recorded budgets.
 
 | Settings | Effective call cap | Wall-time cap | Call accounting |
 |---|---:|---:|---|
-| L1 originals / variants | 100 | disabled | all requests |
-| L2-01–L2-06 originals / variants | 100 | disabled | all requests |
-| L2-07 / L3-01 / L3-02 originals / variants | 100 | disabled | completed generations |
-| L3-03 / L3-04 originals | disabled | 18,000 s | completed generations |
-| L3-03 / L3-04 alternatives | 150 | 18,000 s | completed generations |
+| L1 originals / variants | 150 | 18,000 s | all requests |
+| L2-01–L2-06 originals / variants | 150 | 18,000 s | all requests |
+| L2-07 / L3 originals / variants | 150 | 18,000 s | completed generations |
 
-A zero cap means disabled. `tools/reproduce.py` passes the preserved per-task
-limits explicitly so that `batch_run.py` defaults cannot replace them. CLI
-budget/model/seed overrides must be reported as distinct conditions.
+An explicitly configured zero cap means disabled. `tools/reproduce.py` passes
+each selected configuration's limits explicitly. CLI budget/model/seed overrides
+must be reported as distinct conditions. Batch and remote execution include
+simulator startup and model waiting in the wall-time deadline; the supervisor's
+additional 300 seconds are for cancellation and cleanup, not task execution.
 
 ## Policy and execution
 

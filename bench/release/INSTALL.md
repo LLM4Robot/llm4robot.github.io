@@ -132,13 +132,15 @@ python tools/reproduce.py --tasks L2-02_variant01 --dry-run
 python tools/reproduce.py --tasks L2-02_variant01 --execute
 ```
 
-For ad hoc explicit budgets, e.g. 150 calls and 5 hours:
+All original and alternative tasks default to 150 calls or 5 hours, whichever
+limit is reached first. To state these defaults explicitly:
 
 ```bash
 python tools/batch_run.py --tasks L2-02_variant01 --max-calls 150 --wall-time-s 18000
 ```
 
-This is a budget override, not a claim about historical experiments. A Ctrl+C
+Other explicit values override the defaults and must be reported separately;
+they do not change historical experiments. A Ctrl+C
 asks the owned supervisor to finalize and clean up. Hard power loss does not
 guarantee a finalized MP4 or a recoverable physics state.
 
